@@ -1,6 +1,6 @@
 // src/app.js
 import { slides } from "./slides.js";
-import { applyFX, createParticles } from "./effects.js";
+import { applyFX, createParticles, attachParallax } from "./effects.js";
 
 // DOM
 const photo = document.getElementById("photo");
@@ -13,7 +13,11 @@ const captionEl = document.getElementById("caption");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
 
-// FX layers (must exist in index.html)
+// Final screen
+const final = document.getElementById("final");
+const finalText = document.getElementById("finalText");
+
+// FX layers
 const fxGlowEl = document.getElementById("fxGlow");
 const fxLeakEl = document.getElementById("fxLeak");
 const fxCanvas = document.getElementById("fxParticles");
@@ -24,6 +28,7 @@ let index = 0;
 
 // init
 wireControls();
+attachParallax({ glowEl: fxGlowEl, leakEl: fxLeakEl, strength: 16 });
 render(index, true);
 
 function wireControls() {
@@ -46,11 +51,6 @@ function next() {
   render(index);
 }
 
-/**
- * Render slide by index
- * @param {number} i
- * @param {boolean} instant - first render without animation
- */
 function render(i, instant = false) {
   const slide = slides[i];
 
@@ -61,21 +61,29 @@ function render(i, instant = false) {
 
   // FX
   if (fxGlowEl && fxLeakEl) applyFX({ fxGlowEl, fxLeakEl }, slide.fx || {});
-  if (particles) particles.start(slide.fx?.particles || {});
+  particles.start(slide.fx?.particles || {});
 
-  // Final slide (no image)
+  // FINAL: gradient + big text
   if (!slide.src) {
     if (bg) bg.style.backgroundImage = "none";
+
+    // hide photo, show final
     if (photo) {
-      if (!instant) photo.classList.add("is-switching");
+      photo.classList.add("is-switching");
       setTimeout(() => {
-        photo.removeAttribute("src");
-        photo.alt = slide.title || "Поздравление";
+        photo.style.display = "none";
         photo.classList.remove("is-switching");
       }, instant ? 0 : 220);
     }
+
+    if (final) final.style.display = "block";
+    if (finalText) finalText.textContent = slide.caption || "Спасибо за всё 💗";
     return;
   }
+
+  // PHOTO slide: show photo, hide final
+  if (final) final.style.display = "none";
+  if (photo) photo.style.display = "block";
 
   // Smooth transition
   if (!instant && photo) photo.classList.add("is-switching");
@@ -85,21 +93,16 @@ function render(i, instant = false) {
   // Background image
   if (bg) bg.style.backgroundImage = `url(${nextSrc})`;
 
-  // Preload before swap (so no flicker)
+  // Preload then swap
   const img = new Image();
   img.onload = () => {
     if (!photo) return;
-
     photo.src = nextSrc;
     photo.alt = slide.title || "Фото";
 
-    // remove blur/fade after a short moment
     requestAnimationFrame(() => {
-      if (instant) {
-        photo.classList.remove("is-switching");
-      } else {
-        setTimeout(() => photo.classList.remove("is-switching"), 30);
-      }
+      if (instant) photo.classList.remove("is-switching");
+      else setTimeout(() => photo.classList.remove("is-switching"), 30);
     });
   };
   img.src = nextSrc;
