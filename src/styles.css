@@ -171,6 +171,30 @@ body{ font-family: "Inter", system-ui, Arial, sans-serif; }
   100% { transform: translateY(0px) scale(1); opacity: 1; }
 }
 
+.fx-grain{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.10;
+  mix-blend-mode: overlay;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  animation: grainMove 2.6s steps(6) infinite;
+}
+
+@keyframes grainMove{
+  0%   { transform: translate3d(0,0,0); }
+  20%  { transform: translate3d(-2%, 1%, 0); }
+  40%  { transform: translate3d(1%, -2%, 0); }
+  60%  { transform: translate3d(2%, 2%, 0); }
+  80%  { transform: translate3d(-1%, 2%, 0); }
+  100% { transform: translate3d(0,0,0); }
+}
+
+
+
 
 
 
