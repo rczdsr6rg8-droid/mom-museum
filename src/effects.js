@@ -25,8 +25,8 @@ export function createParticles(canvas) {
 
   function resize() {
     state.dpr = Math.min(2, window.devicePixelRatio || 1);
-    state.w = canvas.clientWidth || window.innerWidth;
-    state.h = canvas.clientHeight || window.innerHeight;
+    state.w = window.innerWidth;
+    state.h = window.innerHeight;
 
     canvas.width = Math.floor(state.w * state.dpr);
     canvas.height = Math.floor(state.h * state.dpr);
@@ -143,3 +143,4 @@ function leakGradient(at, color) {
 
 function rand(a, b) { return a + Math.random() * (b - a); }
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
