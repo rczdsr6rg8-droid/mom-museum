@@ -102,6 +102,21 @@ body{ font-family: "Inter", system-ui, Arial, sans-serif; }
   opacity: 0.25;
 }
 
+.frame img{
+  transition: opacity 280ms ease, filter 280ms ease, transform 520ms ease;
+  opacity: 1;
+  filter: blur(0px);
+  transform: scale(1.01);
+}
+
+.frame img.is-switching{
+  opacity: 0;
+  filter: blur(6px);
+  transform: scale(1.03);
+}
+
+
+
 
 
 
