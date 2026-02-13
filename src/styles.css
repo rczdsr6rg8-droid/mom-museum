@@ -38,19 +38,22 @@ body{ font-family: "Inter", system-ui, Arial, sans-serif; }
   opacity: 0.92;
 }
 
-.frame {
-  width: 70vw;
-  height: 60vh;
-  margin: auto;
-  overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 20px 80px rgba(0,0,0,0.8);
-}
-
-.frame img {
+.frame img{
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;             
+  object-position: center;
+  background: rgba(0,0,0,0.28);     
+  transition: opacity 280ms ease, filter 280ms ease, transform 520ms ease;
+  opacity: 1;
+  filter: blur(0px);
+  transform: scale(1.0);
+}
+
+.frame img.is-switching{
+  opacity: 0;
+  filter: blur(6px);
+  transform: scale(1.02);
 }
 
 .caption{
@@ -114,6 +117,7 @@ body{ font-family: "Inter", system-ui, Arial, sans-serif; }
   filter: blur(6px);
   transform: scale(1.03);
 }
+
 
 
 
