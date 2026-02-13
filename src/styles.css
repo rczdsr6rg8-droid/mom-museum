@@ -68,4 +68,21 @@ button {
   object-position: center 35%; /* подвинь вверх/вниз как надо */
 }
 
+.fx-glow, .fx-leak, .fx-particles{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fx-glow{
+  filter: blur(22px);
+  opacity: 0.85;
+}
+
+.fx-leak{
+  mix-blend-mode: screen;
+  opacity: 0.25;
+}
+
 
