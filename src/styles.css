@@ -52,15 +52,25 @@ body {
   opacity: 0.8;
 }
 
-.controls {
-  margin-top: 20px;
-}
-
-button {
-  padding: 8px 15px;
-  margin: 0 10px;
-  font-size: 16px;
+.controls button{
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.35);
+  color: rgba(255,255,255,0.92);
+  font-size: 18px;
   cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.55);
+  transition: transform 160ms ease, background 160ms ease;
+}
+.controls button:hover{
+  transform: scale(1.05);
+  background: rgba(0,0,0,0.55);
+}
+.controls button:active{
+  transform: scale(0.98);
 }
 
 .frame img{
@@ -84,5 +94,6 @@ button {
   mix-blend-mode: screen;
   opacity: 0.25;
 }
+
 
 
