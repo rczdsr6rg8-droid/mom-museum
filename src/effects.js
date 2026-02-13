@@ -1,40 +1,27 @@
 // src/effects.js
-// Glow + LightLeaks + Particles (GT7-ish, lightweight)
+// Side Rays + LightLeaks + Particles + Mouse Parallax (GT7-ish)
 
 export function applyFX({ fxGlowEl, fxLeakEl }, fx = {}) {
   const glowColor = fx.glowColor ?? "rgba(120,180,255,0.8)";
   const glowStrength = fx.glowStrength ?? 1.0;
 
-  // Soft glow blobs around center and sides
+  // ONLY SIDE RAYS (left/right) – no center blob
   fxGlowEl.style.background = `
-    radial-gradient(620px 420px at 50% 46%, ${glowColor} 0%, rgba(0,0,0,0) 66%),
-    radial-gradient(520px 360px at 18% 52%, ${glowColor} 0%, rgba(0,0,0,0) 70%),
-    radial-gradient(520px 360px at 82% 52%, ${glowColor} 0%, rgba(0,0,0,0) 70%)
+    radial-gradient(900px 600px at 0% 50%, ${glowColor} 0%, rgba(0,0,0,0) 64%),
+    radial-gradient(900px 600px at 100% 50%, ${glowColor} 0%, rgba(0,0,0,0) 64%)
   `;
-  fxGlowEl.style.opacity = String(clamp(0.25 + 0.55 * glowStrength, 0, 1));
+  fxGlowEl.style.opacity = String(clamp(0.22 + 0.55 * glowStrength, 0, 1));
 
-  // Light leaks (color flares)
+  // Light leaks: we keep only side/top/bottom/center depending on fx
   const leaks = fx.leak ?? [];
-  if (!leaks.length) {
-    fxLeakEl.style.background = "none";
-    return;
-  }
-
-  fxLeakEl.style.background = leaks
-    .map((l) => leakGradient(l.at ?? "center", l.color ?? "rgba(255,255,255,0.12)"))
-    .join(", ");
+  fxLeakEl.style.background = leaks.length
+    ? leaks.map((l) => leakGradient(l.at ?? "center", l.color ?? "rgba(255,255,255,0.12)")).join(", ")
+    : "none";
 }
 
 export function createParticles(canvas) {
   const ctx = canvas.getContext("2d");
-  const state = {
-    w: 0,
-    h: 0,
-    dpr: 1,
-    particles: [],
-    cfg: null,
-    raf: null,
-  };
+  const state = { w: 0, h: 0, dpr: 1, particles: [], cfg: null, raf: null };
 
   function resize() {
     state.dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -59,7 +46,7 @@ export function createParticles(canvas) {
         x: Math.random() * state.w,
         y: Math.random() * state.h,
         r: rand(minSize, maxSize),
-        a: rand(0.12, 0.55),
+        a: rand(0.10, 0.50),
         vx: (Math.random() - 0.5) * spread,
         vy: (Math.random() - 0.5) * spread,
       });
@@ -68,7 +55,7 @@ export function createParticles(canvas) {
 
   function tick() {
     const cfg = state.cfg ?? {};
-    const speed = cfg.speed ?? 0.28;
+    const speed = cfg.speed ?? 0.25;
 
     ctx.clearRect(0, 0, state.w, state.h);
 
@@ -112,8 +99,32 @@ export function createParticles(canvas) {
   return { start, stop, resize };
 }
 
-/* ---------- helpers ---------- */
+/**
+ * Mouse parallax for glow/leak layers
+ * strength: px offset at max
+ */
+export function attachParallax({ glowEl, leakEl, strength = 14 }) {
+  if (!glowEl && !leakEl) return;
 
+  let tx = 0, ty = 0;
+  let cx = 0, cy = 0;
+
+  window.addEventListener("mousemove", (e) => {
+    cx = (e.clientX / window.innerWidth - 0.5) * 2;
+    cy = (e.clientY / window.innerHeight - 0.5) * 2;
+    tx = cx * strength;
+    ty = cy * strength;
+  });
+
+  function animate() {
+    if (glowEl) glowEl.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+    if (leakEl) leakEl.style.transform = `translate3d(${tx * 0.7}px, ${ty * 0.7}px, 0)`;
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+/* helpers */
 function leakGradient(at, color) {
   switch (at) {
     case "left":
@@ -130,10 +141,5 @@ function leakGradient(at, color) {
   }
 }
 
-function rand(a, b) {
-  return a + Math.random() * (b - a);
-}
-
-function clamp(v, a, b) {
-  return Math.max(a, Math.min(b, v));
-}
+function rand(a, b) { return a + Math.random() * (b - a); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
