@@ -64,26 +64,28 @@ function render(i, instant = false) {
   particles.start(slide.fx?.particles || {});
 
   // FINAL: gradient + big text
-  if (!slide.src) {
-    if (bg) bg.style.backgroundImage = "none";
+if (!slide.src) {
+  // скрыть маленькую подпись снизу на финале
+  if (captionEl) captionEl.style.display = "none";
 
-    // hide photo, show final
-    if (photo) {
-      photo.classList.add("is-switching");
-      setTimeout(() => {
-        photo.style.display = "none";
-        photo.classList.remove("is-switching");
-      }, instant ? 0 : 220);
-    }
+  if (bg) bg.style.backgroundImage = "none";
 
-    if (final) final.style.display = "block";
-    if (finalText) finalText.textContent = slide.caption ?? "Желаю всегда быть с улыбкой на лице💗";
-    return;
+  if (photo) {
+    photo.classList.add("is-switching");
+    setTimeout(() => {
+      photo.style.display = "none";
+      photo.classList.remove("is-switching");
+    }, instant ? 0 : 220);
   }
 
-  // PHOTO slide: show photo, hide final
-  if (final) final.style.display = "none";
-  if (photo) photo.style.display = "block";
+  if (final) final.style.display = "block";
+  if (finalText) finalText.textContent = slide.caption ?? "Желаю всегда быть с улыбкой на лице💗";
+  return;
+}
+
+// PHOTO slide: show photo, hide final
+if (captionEl) captionEl.style.display = "block";
+
 
   // Smooth transition
   if (!instant && photo) photo.classList.add("is-switching");
@@ -107,5 +109,6 @@ function render(i, instant = false) {
   };
   img.src = nextSrc;
 }
+
 
 
