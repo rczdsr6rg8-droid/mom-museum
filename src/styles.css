@@ -193,6 +193,29 @@ body{ font-family: "Inter", system-ui, Arial, sans-serif; }
   100% { transform: translate3d(0,0,0); }
 }
 
+/* --- FIX LAYERS: effects must NOT push layout --- */
+.bg { position: fixed; inset: 0; z-index: 0; }
+
+.fx-glow, .fx-leak, .fx-particles, .fx-grain{
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* content above effects */
+.viewer{
+  position: relative;
+  z-index: 5;
+}
+
+/* make canvas full-screen */
+.fx-particles{
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+
 
 
 
