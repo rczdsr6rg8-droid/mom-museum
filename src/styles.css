@@ -62,3 +62,10 @@ button {
   font-size: 16px;
   cursor: pointer;
 }
+
+.frame img{
+  object-fit: cover;
+  object-position: center 35%; /* подвинь вверх/вниз как надо */
+}
+
+
