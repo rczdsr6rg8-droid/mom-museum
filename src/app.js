@@ -24,6 +24,9 @@ let index = 0;
 function render(i) {
   const slide = slides[i];
 
+  applyFX({ fxGlowEl, fxLeakEl }, slide.fx || {});
+  particles.start(slide.fx?.particles || {});
+  
   dateEl.textContent = slide.date;
   titleEl.textContent = slide.title;
   captionEl.textContent = slide.caption;
@@ -48,5 +51,6 @@ nextBtn.onclick = () => {
 };
 
 render(index);
+
 
 
