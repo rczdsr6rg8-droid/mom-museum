@@ -1,3 +1,6 @@
+import { slides } from "./slides.js";
+import { applyFX, createParticles } from "./effects.js";
+
 import { applyFX, createParticles } from "./effects.js";
 import { slides } from "./slides.js";
 
@@ -39,3 +42,4 @@ nextBtn.onclick = () => {
 };
 
 render(index);
+
