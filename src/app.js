@@ -1,6 +1,12 @@
 import { slides } from "./slides.js";
 import { applyFX, createParticles } from "./effects.js";
 
+const fxGlowEl = document.getElementById("fxGlow");
+const fxLeakEl = document.getElementById("fxLeak");
+const fxCanvas = document.getElementById("fxParticles");
+const particles = createParticles(fxCanvas);
+
+
 import { applyFX, createParticles } from "./effects.js";
 import { slides } from "./slides.js";
 
@@ -42,4 +48,5 @@ nextBtn.onclick = () => {
 };
 
 render(index);
+
 
