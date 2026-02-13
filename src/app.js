@@ -77,7 +77,7 @@ function render(i, instant = false) {
     }
 
     if (final) final.style.display = "block";
-    if (finalText) finalText.textContent = slide.caption || "Спасибо за всё 💗";
+    if (finalText) finalText.textContent = slide.caption || "Желаю всегда быть с улыбкой на лице💗";
     return;
   }
 
@@ -107,3 +107,4 @@ function render(i, instant = false) {
   };
   img.src = nextSrc;
 }
+
